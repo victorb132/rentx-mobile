@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Alert, StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
 import { useTheme } from 'styled-components';
 
 import { BackButton } from '../../components/BackButton';
@@ -36,7 +36,7 @@ interface Params {
   car: CarDTO
 }
 
-export function Scheduling(){
+export function Scheduling() {
   const [lastSelectedDate, setLastSelectedDate] = useState<DayProps>({} as DayProps);
   const [markedDates, setMarkedDates] = useState<MarkedDateProps>({} as MarkedDateProps);
   const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>({} as RentalPeriod);
@@ -48,14 +48,10 @@ export function Scheduling(){
   const { car } = route.params as Params;
 
   function handleConfirmRental() {
-    if(!rentalPeriod.startFormatted || !rentalPeriod.endFormatted){
-      Alert.alert('Selecione o intervalo para alugar.')
-    }else {
-      navigation.navigate('SchedulingDetails', {
-        car,
-        dates: Object.keys(markedDates)
-      })
-    }
+    navigation.navigate('SchedulingDetails', {
+      car,
+      dates: Object.keys(markedDates)
+    })
   }
 
   function handleBack() {
@@ -66,7 +62,7 @@ export function Scheduling(){
     let start = !lastSelectedDate.timestamp ? date : lastSelectedDate;
     let end = date;
 
-    if(start.timestamp > end.timestamp) {
+    if (start.timestamp > end.timestamp) {
       start = end;
       end = start;
     }
@@ -74,7 +70,7 @@ export function Scheduling(){
     console.log(end)
 
     setLastSelectedDate(end);
-    
+
     const interval = generateInterval(start, end);
     setMarkedDates(interval)
 
@@ -95,7 +91,7 @@ export function Scheduling(){
         translucent
       />
       <Header>
-        <BackButton 
+        <BackButton
           onPress={handleBack}
           color={theme.colors.shape}
         />
@@ -133,7 +129,11 @@ export function Scheduling(){
       </Content>
 
       <Footer>
-        <Button title="Confirmar" onPress={handleConfirmRental} />
+        <Button
+          title="Confirmar"
+          onPress={handleConfirmRental}
+          enabled={!!rentalPeriod.startFormatted}
+        />
       </Footer>
     </Container>
   );
