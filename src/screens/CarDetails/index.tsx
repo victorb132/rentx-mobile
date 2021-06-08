@@ -108,13 +108,13 @@ export function CarDetails(){
       </Animated.View>
 
       <Animated.ScrollView
-      contentContainerStyle={{
-        paddingHorizontal: 24,
-        paddingTop: getStatusBarHeight() + 160,
-      }}
-      showsVerticalScrollIndicator={false}
-      onScroll={scrollHandler}
-      scrollEventThrottle={16}
+        contentContainerStyle={{
+          paddingHorizontal: 24,
+          paddingTop: getStatusBarHeight() + 160,
+        }}
+        showsVerticalScrollIndicator={false}
+        onScroll={scrollHandler}
+        scrollEventThrottle={16}
       >
         <Details>
           <Description>
@@ -135,11 +135,6 @@ export function CarDetails(){
         </Accessories>
 
         <About>
-          {car.about}
-          {car.about}
-          {car.about}
-          {car.about}
-          {car.about}
           {car.about}
         </About>
       </Animated.ScrollView>
