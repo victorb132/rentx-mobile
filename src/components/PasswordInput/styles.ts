@@ -6,10 +6,9 @@ interface ContainerProps {
   isFocused: boolean;
 }
 
+
 export const Container = styled.View<ContainerProps>`
   flex-direction: row;
-
-  margin-bottom: 8px;
 
   ${({ isFocused ,theme }) => isFocused && css`
     border-bottom-width: 2px;
