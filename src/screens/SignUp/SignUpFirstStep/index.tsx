@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -22,6 +22,10 @@ import {
 import { Button } from '../../../components/Button';
 
 export function SignUpFirstStep() {
+  const [name] = useState('');
+  const [password] = useState('');
+  const [email] = useState('');
+
   const navigation = useNavigation();
 
   function handleBack() {
