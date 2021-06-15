@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
 import { BackButton } from '../../../components/BackButton';
@@ -22,12 +23,43 @@ import {
   FormTitle,
 } from './styles';
 
+interface Params {
+  user: {
+    name: string;
+    email: string;
+    driverLicense: string;
+  }
+}
+
 export function SignUpSecondStep() {
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+
   const navigation = useNavigation();
   const theme = useTheme();
+  const route = useRoute();
+
+  const { user } = route.params as Params;
 
   function handleBack() {
     navigation.goBack();
+  }
+
+  function handleRegister(){
+    if(!password || !passwordConfirm) {
+      return Alert.alert('Informe a senha e a confirmação.')
+    }
+
+    if(password != passwordConfirm) {
+      return Alert.alert('As senhas não são iguais.')
+    }
+
+    // TODO: enviar para api e cadastrar
+    navigation.navigate('Confirmation', {
+      nextScreenRoute: 'SignIn',
+      title: 'Conta Criada!',
+      message: `Agora é só fazer login\ne aproveitar.`
+    })
   }
 
   return (
@@ -55,10 +87,14 @@ export function SignUpSecondStep() {
             <PasswordInput 
               iconName='lock'
               placeholder='Senha'
+              onChangeText={setPassword}
+              value={password}
             />
             <PasswordInput 
               iconName='lock'
               placeholder='Repetir Senha'
+              onChangeText={setPasswordConfirm}
+              value={passwordConfirm}
             />
           </Form>
 
@@ -67,6 +103,7 @@ export function SignUpSecondStep() {
             title='Cadastrar'
             enabled={true}
             loading={false}
+            onPress={handleRegister}
           />
         </Container>
       </TouchableWithoutFeedback>
