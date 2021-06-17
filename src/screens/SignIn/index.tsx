@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { 
   StatusBar,
@@ -16,6 +16,8 @@ import { Input } from '../../components/Input';
 import { PasswordInput } from '../../components/PasswordInput';
 
 import theme from '../../styles/theme';
+
+import { database } from '../../database';
 
 import {
   Container,
@@ -60,6 +62,16 @@ export function SignIn() {
   async function handleNewAccount() {
     navigation.navigate('SignUpFirstStep');
   }
+
+  useEffect(() => {
+    async function loadData() {
+      const userCollection = database.get('users');
+      
+      const users = await userCollection.query().fetch();
+      console.log(users)
+    }
+    loadData();
+  }, []);
 
   return (
     <KeyboardAvoidingView behavior="position" enabled>
