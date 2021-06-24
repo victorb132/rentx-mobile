@@ -5,6 +5,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 import { Feather } from '@expo/vector-icons';
+import { useNetInfo } from '@react-native-community/netinfo';
 import * as Yup from 'yup';
 
 import { useAuth } from '../../hooks/auth';
@@ -38,6 +39,7 @@ export function Profile() {
   const [name, setName] = useState(user.name);
   const [driverLicense, setDriverLicense] = useState(user.driver_license);
 
+  const netInfo = useNetInfo();
   const theme = useTheme();
   const navigation = useNavigation();
 
@@ -46,7 +48,11 @@ export function Profile() {
   }
 
   function handleOptionChange(optionSelected: 'dataEdit' | 'passwordEdit') {
-    setOption(optionSelected);
+    if(netInfo.isConnected === false && optionSelected === 'passwordEdit') {
+      Alert.alert('Você está Offline', 'Para mudar a senha, conecte-se a Internet');
+    } else {
+      setOption(optionSelected);
+    }
   }
 
   async function handleAvatarSelect(){
@@ -94,11 +100,29 @@ export function Profile() {
       if(error instanceof Yup.ValidationError) {
         Alert.alert('Opa', error.message);
       } else {
+        console.log(error)
         Alert.alert('Não foi possível atualizar o perfil');
       }
       
     }
   }
+
+  async function handleSignOut(){
+    Alert.alert(
+      'Tem certeza?', 
+      'Se você sair, irá precisar de internet para conectar-se novamente.',
+      [
+        {
+          text: 'Cancelar',
+          onPress: () => {},
+        },
+        {
+          text: 'Sair',
+          onPress: () => signOut(),
+        }
+      ]
+    );
+  } 
 
   return (
     <KeyboardAvoidingView behavior="position" enabled>
@@ -111,7 +135,7 @@ export function Profile() {
                 onPress={handleBack}
               />
               <HeaderTitle>Editar Perfil</HeaderTitle>
-              <LogoutButton onPress={signOut}>
+              <LogoutButton onPress={handleSignOut}>
                 <Feather
                   name="power"
                   size={24}

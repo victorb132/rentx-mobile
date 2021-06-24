@@ -30,6 +30,7 @@ interface AuthContextData {
   signIn: (credentials: SignInCredentials) => Promise<void>;
   signOut: () => Promise<void>;
   updatedUser: (user: User) => Promise<void>;
+  loading: boolean;
 }
 
 interface AuthProviderProps {
@@ -40,6 +41,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 function AuthProvider({ children }: AuthProviderProps) {
   const [data, setData] = useState<User>({} as User);
+  const [loading, setLoading] = useState(true);
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
@@ -101,6 +103,7 @@ function AuthProvider({ children }: AuthProviderProps) {
       setData(user);
 
     } catch (error) {
+      console.log(error)
       throw new Error(error);
     }
   }
@@ -114,6 +117,7 @@ function AuthProvider({ children }: AuthProviderProps) {
         const userData = response[0]._raw as unknown as User;
         api.defaults.headers.authorization = `Bearer ${userData.token}`;
         setData(userData);
+        setLoading(false);
       }
     }
 
@@ -125,7 +129,8 @@ function AuthProvider({ children }: AuthProviderProps) {
       user: data,
       signIn,
       signOut,
-      updatedUser
+      updatedUser,
+      loading
     }}>
       {children}
     </AuthContext.Provider>
