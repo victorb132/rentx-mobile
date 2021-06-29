@@ -46,17 +46,16 @@ export function Splash(){
   });
 
   function startApp() {
-    // console.log('foi')
     navigation.navigate('SignIn');
   }
 
   useEffect(() => {
     // TODO - Work in android
-    splashAnimation.value = withTiming(50, { duration: 3000 }, () => {
-      'worklet'
-      runOnJS(startApp)();
-    });
-    // startApp();
+    // splashAnimation.value = withTiming(50, { duration: 3000 }, () => {
+    //   'worklet'
+    //   runOnJS(startApp)();
+    // });
+    startApp();
   }, [])
 
   return (
