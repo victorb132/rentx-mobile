@@ -26,7 +26,7 @@ export function Splash(){
   const brandStyle = useAnimatedStyle(() => {
     return {
       opacity: interpolate(splashAnimation.value, [0, 50], [1, 0]),
-      tansform: [
+      transform: [
         {
           translateX: interpolate(splashAnimation.value, [0, 50], [0, -50], Extrapolate.CLAMP)
         }
@@ -50,12 +50,10 @@ export function Splash(){
   }
 
   useEffect(() => {
-    // TODO - Work in android
-    // splashAnimation.value = withTiming(50, { duration: 3000 }, () => {
-    //   'worklet'
-    //   runOnJS(startApp)();
-    // });
-    startApp();
+    splashAnimation.value = withTiming(50, { duration: 3000 }, () => {
+      'worklet'
+      runOnJS(startApp)();
+    });
   }, [])
 
   return (
